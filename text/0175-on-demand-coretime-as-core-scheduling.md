@@ -3,24 +3,24 @@
 |                 |                                                                                             |
 | --------------- | ------------------------------------------------------------------------------------------- |
 | **Start Date**  | 13 August 2026                                                                              |
-| **Description** | Move on-demand order placement, pricing, and payment to the Coretime chain; serve paid orders as one-shot core assignments through the existing scheduling channel. |
+| **Description** | Proposal to move on-demand coretime sales from the Relay Chain to the Coretime chain. |
 | **Authors**     | Sergej Sakač                                                                                |
 
 ## Summary
 
-On-demand ordering moves to the Coretime chain, and the Relay Chain stops knowing that on-demand exists. The broker sells individual future blocks on pool cores and streams them to the Relay Chain as one-shot core assignments, through the same `assign_core` channel that bulk coretime already uses. Users pay DOT on the Coretime chain at a spot price computed from purely local state. The Relay Chain's `on_demand` pallet is removed, along with its credit and revenue accounting.
+This RFC proposes moving on-demand coretime sales from the Relay Chain to the Coretime chain. The broker sells individual blocks on pool cores and commits them to the Relay Chain as one-shot core assignments, through the same channel that bulk coretime already uses. The spot price is computed from Coretime chain state alone. The Relay Chain's `on_demand` pallet is removed.
 
 ## Motivation
 
-RFC-1 split coretime into two products: Bulk Coretime, sold on the Coretime chain, and Instantaneous (on-demand) Coretime, sold on the Relay Chain. Bulk allocation is fully owned by the Coretime chain today: the broker pallet computes each core's schedule and commits it to the Relay Chain via the `assign_core` call specified in RFC-5. On-demand is the exception. To sell a single block, the Relay Chain maintains:
+RFC-1 defined two coretime products: Bulk Coretime, sold on the Coretime chain, and on-demand coretime, sold on the Relay Chain. Bulk is fully owned by the Coretime chain: the broker computes each core's schedule and commits it to the Relay Chain via `assign_core` (RFC-5). On-demand is the exception. To sell a single block, the Relay Chain maintains:
 
-- an order queue (`on_demand` pallet) holding up to `on_demand_queue_max_size` orders, which is scanned in full on every scheduling round;
-- an adaptive spot price (`traffic * on_demand_base_fee`), updated every block and on every order;
-- three user-facing extrinsics (`place_order_allow_death`, `place_order_keep_alive`, `place_order_with_credits`);
-- a payment pot and revenue tracking, so that income can later be teleported to the Coretime chain;
-- a `Credits` ledger, tracking credits purchased on the Coretime chain and spent on relay-side orders.
+- an order queue
+- an adaptive spot price
+- extrinsics for placing orders (`place_order_*`)
+- a payment pot and revenue tracking, so that income can be teleported back to the Coretime chain
+- a `Credits` ledger for credits purchased on the Coretime chain
 
-This is the last piece of coretime still living on the Relay Chain; RFC-32 (Minimal Relay) set the direction of migrating such subsystems into system chains.
+This is the last part of coretime remaining on the Relay Chain. RFC-32 established the goal of migrating such functionality into system chains.
 
 ### Requirements
 
@@ -59,9 +59,9 @@ The `on_demand` pallet and all remaining on-demand logic is deleted from the Rel
 
 The broker assigns each order to the pool core with the fewest pending orders. It refuses an order only when:
 
-- the spot price exceeds the caller's `max_amount`;
-- every pool core has reached `MAX_PENDING_ORDERS_PER_CORE` pending orders; or
-- `MAX_ORDERS_PER_BLOCK` orders have already been accepted in this block.
+- the spot price exceeds the caller's `max_amount`
+- every pool core has reached `MAX_PENDING_ORDERS_PER_CORE` pending orders
+- `MAX_ORDERS_PER_BLOCK` orders have already been accepted in this block
 
 Orders MUST NOT be accepted onto a core that leaves the pool before the order's expected service block (plus a safety margin). Bulk scheduling has priority on the Relay Chain: a windowed schedule takes over the core at its `begin` even if one-shot tasks are still pending. The safety margin is therefore what guarantees that every paid order is served before the core changes hands.
 
@@ -135,20 +135,59 @@ with `traffic` updated by the same adaptive formula the Relay Chain uses now, bu
 - *queue size* is the number of orders accepted but not yet served. The broker can track this locally, since the Relay Chain serves one task per pool core per block;
 - *queue capacity* is `number_of_pool_cores * MAX_PENDING_ORDERS_PER_CORE`.
 
-TODO...
+`traffic` is updated on every order and on every block, as today. The `on_demand_base_fee`, target-utilisation, and fee-variability parameters move from the Relay Chain's `HostConfiguration` into broker configuration.
+
+### Payment and pool revenue
+
+The spot price is paid into the broker's pot and accrued to the current timeslice's `InstaPoolHistory` record. This is the same record that receives on-demand revenue today. Distribution is unchanged: the system's share is burned per RFC-10, and private pool contributors claim theirs through `claim_revenue`.
 
 ## Drawbacks
 
-TODO
+- **Latency.** An order must be included in a Coretime chain block and delivered over UMP before it can be scheduled. This adds a few relay blocks compared to ordering on the Relay Chain directly.
+- **Retries.** A blocked one-shot retries until served, and the tasks behind it wait. Blocking conditions resolve within a few blocks, so the delay is bounded in practice. This is the cost of the no-drop guarantee (Requirement 2).
+- **Pooling.** Requiring a complete `CoreMask` for pooling removes the ability to contribute interlaced regions to the pool.
+- **Price model approximation.** The broker assumes one order is served per pool core per relay block. Blocked cores retry, so an order counted as served may still be pending.
 
 ## Testing, Security, and Privacy
 
-TODO
+Unit tests MUST cover the one-shot scheduling semantics on the Relay Chain and the ordering, batching, and pricing logic on the Coretime chain. The full flow, from order placement to a served one-shot assignment, SHOULD be covered by integration tests.
+
+`assign_core_once` is callable only by root or the broker parachain, the same trust assumption as `assign_core`. The Coretime chain can already assign arbitrary cores, so no new privilege is created.
+
+No privacy implications: order placement is exactly as public as it is today.
+
+## Performance, Ergonomics, and Compatibility
+
+### Performance
+
+This is an optimization for the Relay Chain: the order queue, spot pricing, and payment handling are removed. The Coretime chain takes on the work instead.
+
+### Ergonomics
+
+Collators place orders on the Coretime chain instead of the Relay Chain. Tooling built against the relay-side `place_order_*` extrinsics must be repointed at the new `place_order`.
+
+### Compatibility
+
+The rollout is a breaking change to the on-demand interface and MUST be sequenced so that no paid order is left unserved. The Relay Chain gains `assign_core_once` first; relay-side ordering is then disabled and the queue drains; only then does the broker switch to selling one-shots.
+
+RFC-5's interface is extended with one new call. `assign_core` and the `CoreAssignment` encoding are untouched. Consumers of the claim-queue runtime API see no difference between a one-shot and a bulk assignment.
 
 ## Prior Art and References
 
-TODO
+- [RFC-1: Agile Coretime](https://polkadot-fellows.github.io/RFCs/approved/0001-agile-coretime.html): defined Instantaneous Coretime.
+- [RFC-5: Coretime Interface](https://polkadot-fellows.github.io/RFCs/approved/0005-coretime-interface.html): the interface this proposal extends.
+- [RFC-10: Burn Coretime Revenue](https://polkadot-fellows.github.io/RFCs/approved/0010-burn-coretime-revenue.html): handling of the system's revenue share.
+- [RFC-32: Minimal Relay](https://polkadot-fellows.github.io/RFCs/approved/0032-minimal-relay.html): the direction this proposal follows.
+- Draft relay-side implementation: <https://github.com/paritytech/polkadot-sdk/compare/master...szegoo-oneshot-assignments>
+
+## Unresolved Questions
+
+- **Parameter values.** `MAX_PENDING_ORDERS_PER_CORE` and `MAX_ORDERS_PER_BLOCK` need concrete values.
+- **Core-exit margin.** How large should the safety margin be when refusing orders on a core that is about to leave the pool? Too small a margin risks a paid order being cut off by the incoming tenant's schedule.
+- **Same-block re-ordering.** Today's relay queue serves at most one order per parachain per scheduling round. Should the broker impose an equivalent rule (e.g. at most one buffered order per para per core per block), or is unrestricted ordering acceptable now that each order is bound to a concrete queue position at purchase time?
 
 ## Future Directions and Related Material
 
-TODO
+- Removing on-demand takes the Relay Chain a step closer to the transactionless relay envisioned in RFC-32.
+- `assign_core_once` is a general primitive. New products could be built purely in Coretime chain logic, with no further relay changes.
+- Selling one-shots for the same parachain on multiple cores in the same block would give on-demand elastic scaling. The relay-side design does not preclude this.
