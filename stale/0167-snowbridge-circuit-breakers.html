@@ -1,0 +1,368 @@
+
+<!DOCTYPE HTML>
+<html lang="en" class="polkadot" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>RFC-0167: Snowbridge Circuit Breakers - Polkadot Fellowship RFCs</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="An online book of RFCs approved or proposed within the Polkadot Fellowship.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/polkadot.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "polkadot" : "polkadot";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('polkadot')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Newly Proposed</li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Proposed</li><li class="chapter-item expanded "><a href="../proposed/0000-pq_accounts.html">RFC-0000: Hybrid post-quantum accounts (DRAFT)</a></li><li class="chapter-item expanded "><a href="../proposed/0000-rewards.html">RFC-0000: Validator Rewards</a></li><li class="chapter-item expanded "><a href="../proposed/0166-snowbridge-emergency-pause-pallet.html">RFC-0166: Snowbridge Emergency Pause Pallet</a></li><li class="chapter-item expanded "><a href="../proposed/0174-light-client-extrinsics-inclusion-proof.html">RFC-0174: Light client extrinsics-trie inclusion proof request</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Approved</li><li class="chapter-item expanded "><a href="../approved/0001-agile-coretime.html">RFC-1: Agile Coretime</a></li><li class="chapter-item expanded "><a href="../approved/0005-coretime-interface.html">RFC-5: Coretime Interface</a></li><li class="chapter-item expanded "><a href="../approved/0007-system-collator-selection.html">RFC-0007: System Collator Selection</a></li><li class="chapter-item expanded "><a href="../approved/0008-parachain-bootnodes-dht.html">RFC-0008: Store parachain bootnodes in relay chain DHT</a></li><li class="chapter-item expanded "><a href="../approved/0009-improved-net-light-client-requests.html">RFC-0009: Improved light client requests networking protocol</a></li><li class="chapter-item expanded "><a href="../approved/0010-burn-coretime-revenue.html">RFC-0010: Burn Coretime Revenue</a></li><li class="chapter-item expanded "><a href="../approved/0012-process-for-adding-new-collectives.html">RFC-0012: Process for Adding New System Collectives</a></li><li class="chapter-item expanded "><a href="../approved/0013-prepare-blockbuilder-and-core-runtime-apis-for-mbms.html">RFC-0013: Prepare Core runtime API for MBMs</a></li><li class="chapter-item expanded "><a href="../approved/0014-improve-locking-mechanism-for-parachains.html">RFC-0014: Improve locking mechanism for parachains</a></li><li class="chapter-item expanded "><a href="../approved/0017-coretime-market-redesign.html">RFC-0017: Coretime Market Redesign</a></li><li class="chapter-item expanded "><a href="../approved/0022-adopt-encointer-runtime.html">RFC-0022: Adopt Encointer Runtime</a></li><li class="chapter-item expanded "><a href="../approved/0026-sassafras-consensus.html">RFC-0026: Sassafras Consensus Protocol</a></li><li class="chapter-item expanded "><a href="../approved/0032-minimal-relay.html">RFC-0032: Minimal Relay</a></li><li class="chapter-item expanded "><a href="../approved/0042-extrinsics-state-version.html">RFC-0042: Add System version that replaces StateVersion on RuntimeVersion</a></li><li class="chapter-item expanded "><a href="../approved/0043-storage-proof-size-hostfunction.html">RFC-0043: Introduce storage_proof_size Host Function for Improved Parachain Block Utilization</a></li><li class="chapter-item expanded "><a href="../approved/0045-nft-deposits-asset-hub.html">RFC-0045: Lowering NFT Deposits on Asset Hub</a></li><li class="chapter-item expanded "><a href="../approved/0047-assignment-of-availability-chunks.html">RFC-0047: Assignment of availability chunks to validators</a></li><li class="chapter-item expanded "><a href="../approved/0048-session-keys-runtime-api.html">RFC-0048: Generate ownership proof for SessionKeys</a></li><li class="chapter-item expanded "><a href="../approved/0050-fellowship-salaries.html">RFC-0050: Fellowship Salaries</a></li><li class="chapter-item expanded "><a href="../approved/0056-one-transaction-per-notification.html">RFC-0056: Enforce only one transaction per notification</a></li><li class="chapter-item expanded "><a href="../approved/0059-nodes-capabilities-discovery.html">RFC-0059: Add a discovery mechanism for nodes based on their capabilities</a></li><li class="chapter-item expanded "><a href="../approved/0078-merkleized-metadata.html">RFC-0078: Merkleized Metadata</a></li><li class="chapter-item expanded "><a href="../approved/0084-general-transaction-extrinsic-format.html">RFC-0084: General transactions in extrinsic format</a></li><li class="chapter-item expanded "><a href="../approved/0091-dht-record-creation-time.html">RFC-0091: DHT Authority discovery record creation time</a></li><li class="chapter-item expanded "><a href="../approved/0097-unbonding_queue.html">RFC-0097: Unbonding Queue</a></li><li class="chapter-item expanded "><a href="../approved/0099-transaction-extension-version.html">RFC-0099: Introduce a transaction extension version</a></li><li class="chapter-item expanded "><a href="../approved/0100-xcm-multi-type-asset-transfer.html">RFC-0100: New XCM instruction: InitiateAssetsTransfer</a></li><li class="chapter-item expanded "><a href="../approved/0101-xcm-transact-remove-max-weight-param.html">RFC-0101: XCM Transact remove require_weight_at_most parameter</a></li><li class="chapter-item expanded "><a href="../approved/0103-introduce-core-index-commitment.html">RFC-0103:  Introduce a CoreIndex commitment and a SessionIndex field in candidate receipts</a></li><li class="chapter-item expanded "><a href="../approved/0105-xcm-improved-fee-mechanism.html">RFC-0105: XCM improved fee mechanism</a></li><li class="chapter-item expanded "><a href="../approved/0107-xcm-execution-hints.html">RFC-0107: XCM Execution hints</a></li><li class="chapter-item expanded "><a href="../approved/0108-xcm-remove-testnet-ids.html">RFC-0108: Remove XCM testnet NetworkIds</a></li><li class="chapter-item expanded "><a href="../approved/0122-alias-origin-on-asset-transfers.html">RFC-0122: Asset transfers can alias XCM origin on destination to original origin</a></li><li class="chapter-item expanded "><a href="../approved/0123-pending-code-as-storage-location-for-runtime-upgrades.html">RFC-0123: Introduce :pending_code as intermediate storage key for the runtime code</a></li><li class="chapter-item expanded "><a href="../approved/0125-xcm-asset-metadata.html">RFC-0125: XCM Asset Metadata</a></li><li class="chapter-item expanded "><a href="../approved/0126-introduce-pvq.html">RFC-0126: Introduce PVQ (PolkaVM Query)</a></li><li class="chapter-item expanded "><a href="../approved/0135-compressed-blob-prefixes.html">RFC-0135: Compressed Blob Prefixes</a></li><li class="chapter-item expanded "><a href="../approved/0139-faster-erasure-coding.html">RFC-0139: Faster Erasure Coding</a></li><li class="chapter-item expanded "><a href="../approved/0145-remove-unnecessary-allocator-usage.html">RFC-0145: Remove the host-side runtime memory allocator</a></li><li class="chapter-item expanded "><a href="../approved/0146-deflationary-fee-proposal.html">RFC-0146: Deflationary Transaction Fee Model for the Relay Chain and its System Parachains</a></li><li class="chapter-item expanded "><a href="../approved/0149-rfc-1-renewal-adjustment.html">RFC-0149: Renewal Adjustment</a></li><li class="chapter-item expanded "><a href="../approved/0150-voting-while-delegating.html">RFC-150: Allow Voting While Delegating</a></li><li class="chapter-item expanded "><a href="../approved/0156-bls-signatures.html">RFC-0156: Add BLS12-381 Host Functions</a></li><li class="chapter-item expanded "><a href="../approved/0163-ec-host-functions.html">RFC-0163: Elliptic Curves Host Functions</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Stale</li><li class="chapter-item expanded "><a href="../stale/0000-pre-elves_soft.html">RFC-0000: Pre-ELVES soft concensus</a></li><li class="chapter-item expanded "><a href="../stale/0074-stateful-multisig-pallet.html">RFC-0074: Stateful Multisig Pallet</a></li><li class="chapter-item expanded "><a href="../stale/0102-offchain-parachain-runtime-upgrades.html">RFC-0000: Feature Name Here</a></li><li class="chapter-item expanded "><a href="../stale/0104-stale-nomination-reward-curve.html">RFC-0104: Stale Nomination Reward Curve</a></li><li class="chapter-item expanded "><a href="../stale/0106-xcm-remove-fees-mode.html">RFC-0106: Remove XCM fees mode</a></li><li class="chapter-item expanded "><a href="../stale/0111-pure-proxy-replication.html">RFC-0111: Pure Proxy Replication</a></li><li class="chapter-item expanded "><a href="../stale/0112-compress-state-response-message-in-state-sync.html">RFC-0112: Compress the State Response Message in State Sync</a></li><li class="chapter-item expanded "><a href="../stale/0117-unbrick-collective.html">RFC-0117: The Unbrick Collective</a></li><li class="chapter-item expanded "><a href="../stale/0124-extrinsic-version-5.html">RFC-0124: Extrinsic version 5</a></li><li class="chapter-item expanded "><a href="../stale/0138-invulnerable-collator-election.html">RFC-0138: Election mechanism for invulnerable collators on system chains</a></li><li class="chapter-item expanded "><a href="../stale/0154-multi-slot-aura.html">RFC-0154: AURA Multi-Slot Collation </a></li><li class="chapter-item expanded "><a href="../stale/0158-storage-proof-size-v2.html">RFC-0158: Storage Proof Size Host Function Version 2</a></li><li class="chapter-item expanded "><a href="../stale/0159-spend-canceller-track.html">RFC-0000: Spend Canceller Track</a></li><li class="chapter-item expanded "><a href="../stale/0160-pub-sub-mechanism.html">RFC-0160: PubSub Mechanism</a></li><li class="chapter-item expanded "><a href="../stale/0161-discussion-phase-for-opengov-referenda.html">RFC-0161: Discussion Period for OpenGov Referenda</a></li><li class="chapter-item expanded "><a href="../stale/0162-antitrust-omnibus.html">RFC-0162: The Ecosystem Anti-Trust & Market Structure Omnibus</a></li><li class="chapter-item expanded "><a href="../stale/0164-aura-allow-anyone-to-author-blocks.html">RFC-0164: Aura: Allow anyone to produce blocks after a downtime</a></li><li class="chapter-item expanded "><a href="../stale/0167-snowbridge-circuit-breakers.html" class="active">RFC-0167: Snowbridge Circuit Breakers</a></li><li class="chapter-item expanded "><a href="../stale/0171-asset-based-storage-deposit-payments.html">RFC-0171: Asset-Based Storage Deposit Payments</a></li><li class="chapter-item expanded "><a href="../stale/0172-eth-rpc-compatibility-pallet-revive.html">RFC-0172: Ethereum JSON-RPC compatibility standard for pallet-revive</a></li><li class="chapter-item expanded "><a href="../stale/0173-check-created-at-height.html">RFC-0173: Prevent Transaction Replay After Account Reaping via CheckCreatedAtHeight</a></li><li class="chapter-item expanded "><a href="../stale/xxxx-improve-the-security-of-proof-of-possession.html">RFC-XXXX: Adding customized mandatory context to proof of possession statement</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="polkadot">Polkadot</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Polkadot Fellowship RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p><a href="https://github.com/polkadot-fellows/RFCs/pull/167">(source)</a></p>
+<p><strong>Table of Contents</strong></p>
+<ul>
+<li><a href="#rfc-0167-snowbridge-circuit-breakers">RFC-0167: Snowbridge Circuit Breakers</a>
+<ul>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#stakeholders">Stakeholders</a></li>
+<li><a href="#explanation">Explanation</a>
+<ul>
+<li><a href="#gateway-circuit-breaker">Gateway Circuit Breaker</a></li>
+<li><a href="#asset-hub-circuit-breaker">Asset Hub Circuit Breaker</a></li>
+<li><a href="#caps-set-by-governance">Caps set by Governance</a></li>
+<li><a href="#observability-and-alerting">Observability and alerting</a></li>
+</ul>
+</li>
+<li><a href="#drawbacks">Drawbacks</a></li>
+<li><a href="#testing-security-and-privacy">Testing, Security, and Privacy</a></li>
+<li><a href="#performance-ergonomics-and-compatibility">Performance, Ergonomics, and Compatibility</a>
+<ul>
+<li><a href="#performance">Performance</a></li>
+<li><a href="#ergonomics">Ergonomics</a></li>
+<li><a href="#compatibility">Compatibility</a></li>
+</ul>
+</li>
+<li><a href="#prior-art-and-references">Prior Art and References</a></li>
+<li><a href="#unresolved-questions">Unresolved Questions</a></li>
+<li><a href="#future-directions-and-related-material">Future Directions and Related Material</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="rfc-0167-snowbridge-circuit-breakers"><a class="header" href="#rfc-0167-snowbridge-circuit-breakers">RFC-0167: Snowbridge Circuit Breakers</a></h1>
+<div class="table-wrapper"><table><thead><tr><th></th><th></th></tr></thead><tbody>
+<tr><td><strong>Start Date</strong></td><td>2026-05-28</td></tr>
+<tr><td><strong>Description</strong></td><td>Per-asset velocity caps on the Ethereum Gateway (P→E) and Asset Hub (E→P) that automatically throttle irregular Snowbridge flows in both directions.</td></tr>
+<tr><td><strong>Authors</strong></td><td>Snowbridge team</td></tr>
+</tbody></table>
+</div>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Snowbridge does not currently have any proactive on-chain security measures in place, in case of irregular activity. This proposal suggests adding on-chain rate limiting, with the main goal being reducing artificial latency in case of an exploit, which gives the team time to halt the bridge. This RFC goes hand in hand with the reactive security measure that is introduced in <a href="./0166-snowbridge-emergency-pause-pallet.html">Snowbridge Emergency Pause Pallet RFC</a>.</p>
+<h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
+<p>At the moment, there is no way to halt Snowbridge besides a Fellowship-driven whitelisted caller proposal to halt Snowbridge. A permissionless halt is proposed in <a href="./0166-snowbridge-emergency-pause-pallet.html">Snowbridge Emergency Pause Pallet RFC</a>. A reactive halt might not be enough in the case of an exploit that already occurred, and saw millions of dollars flow out of the bridge. Consequently, this proposal adds a proactive security measure - delaying unusual large net transfers in either direction (funds leaving the bridge on Ethereum, or bridged assets minted on Polkadot), to give the community time to inspect the transfer, and halt the bridge via the permissionless halt, if illegitimate.</p>
+<p>The need for such a feature is supported by other popular bridges, e.g. (Wormhole's <a href="https://github.com/wormhole-foundation/wormhole/blob/main/whitepapers/0007_governor.md">Governor</a>, Axelar's <a href="https://www.axelar.network/blog/axelar-governance-explained">transfer-rate limits</a> and LayerZero OFT's <a href="https://github.com/LayerZero-Labs/devtools/blob/main/packages/oapp-evm/contracts/oapp/utils/RateLimiter.sol"><code>RateLimiter</code></a>). Bridges that did not implement rate limiting, have seen exploits that might have been prevented with rate limiting (Nomad's <a href="https://cloud.google.com/blog/topics/threat-intelligence/dissecting-nomad-bridge-hack">$190M exploit</a>, Multichain, Ronin, Wormhole's own pre-Governor Solana exploit). This RFC adopts the best practices that other bridges have set: per-asset, rolling-window, governance-set, auto-lifting.</p>
+<p>The downside with circuit breakers is that legitimate transactions might be delayed from time to time. The circuit breaker settings will be calibrated to minimize this as much as possible. Even if larger transactions might be delayed, this is an acceptable tradeoff for protection against exploits.</p>
+<h2 id="stakeholders"><a class="header" href="#stakeholders">Stakeholders</a></h2>
+<ul>
+<li><strong>Snowbridge maintainers</strong>, who implement this proposal and suggest initial caps.</li>
+<li><strong>Polkadot Fellowship and OpenGov</strong>, who vote on per-asset caps via governance.</li>
+<li><strong>Snowbridge users and integrators</strong>, who experience a tripped cap as a temporary lockdown of one asset+direction. Main stakeholder here is Hydration.</li>
+<li><strong>Asset issuers</strong> whose tokens are listed on Snowbridge and would have caps set against them.</li>
+<li><strong>Relayers and the existing relayer-operated monitoring stack</strong>, which becomes the alerting backbone for cap events.</li>
+</ul>
+<h2 id="explanation"><a class="header" href="#explanation">Explanation</a></h2>
+<h3 id="gateway-circuit-breaker"><a class="header" href="#gateway-circuit-breaker">Gateway Circuit Breaker</a></h3>
+<p>Snowbridge's honey pot is primarily on Ethereum - all locked funds bridged from Ethereum to Polkadot are located in the Snowbridge gateway contract. For this reason, it makes sense to protect these assets from irregular activity, in the gateway contract. Additionally, Polkadot Native Assets (PNAs) like DOT are minted on Ethereum, backed by assets on Asset Hub, which also need protection against irregular minting.</p>
+<p>If one considers the possible exploit shapes, they would all be protected by a circuit breaker, given the circuit breaker catches the outflow pattern:</p>
+<ul>
+<li>Forged BEEFY commitment</li>
+<li>MMR proof bug</li>
+<li>Gateway message decode bug</li>
+<li>PNA minting bug</li>
+</ul>
+<p>The implementation should track per-asset, net outflow over a rolling 24 hour window, both ERC-20s and Ether, and PNAs (Polkadot native assets, like DOT). This part of the circuit breaker is specifically for P-&gt;E transfers For each asset and each class, net movement (outflow - inflow) is tracked over the window. Net flow is tracked so two-way arbitrage and market-maker activity doesn't trigger the cap and unnecessarily delay transactions. This is borrowed from Hydration's <code>pallet-circuit-breaker</code> net-volume pattern. </p>
+<p>A 24 hour window is suggested, as the delay needs to be long enough for bridge operators to notice. The window matches bridges like Wormhole and LayerZero's behaviour. Assets should be tracked by denomination, not USD, so that it doesn't create reliance on oracles. Assets without a cap ignore the circuit breaker pattern, so that the tracking is opt-in by way of governance vote.</p>
+<p>The suggested cap formula is <code>cap = max(5x trailing-7-day-median hourly net flow, configured floor per asset)</code>.</p>
+<ul>
+<li>The 5x multiplier is high enough to not trip on legitimate spikes.</li>
+<li>The floor prevents low-volume-but-high-value assets from having too low a cap relative to their total locked value.</li>
+<li>Both factors are governance-settable per asset; no automatic defaults at asset registration (new assets start uncapped).</li>
+</ul>
+<p>If the cap is tripped, asset movement is locked for a certain set time (proposed 24 hours). Other asset transfers continue as normal. Once the locked time elapses, the asset transfer continues as normal. </p>
+<p>Specific implementation details:</p>
+<ul>
+<li>E→P: Tracks inflow.</li>
+<li>P→E: Tracks outflow, and checks cap. Asset transfers that would breach the cap are deferred, and the nonce is not processed. Relayers should watch and respect this lock, and resubmit the transaction when the lock lifts.</li>
+</ul>
+<p>The reason why the asset lock auto-lifts is that this mechanism is a buy-us-time defense, not a defense in and of itself. The inverse also adds unnecessary burden on governance - not auto-resuming would require the Fellowship/OpenGov to submit unlock referendums, which is added admin for little gain.</p>
+<p>The increased gas cost to add the circuit breaker is estimated to be around ~10-15k extra (read and write the per-asset counter and check the cap).</p>
+<p>It is worth noting that the gateway circuit breaker only covers P-&gt;E transfers because in the case of E-&gt;P transfers, where an exploit bypasses Ethereum and submits fraudulent transactions to Bridge Hub, the circuit breaker on Ethereum won't help. This is why a separate circuit breaker on Asset Hub is also required.</p>
+<h3 id="asset-hub-circuit-breaker"><a class="header" href="#asset-hub-circuit-breaker">Asset Hub Circuit Breaker</a></h3>
+<p>The Asset Hub breaker caps the net amount of each bridged asset that arrives from Ethereum over a rolling window:</p>
+<ul>
+<li>Ethereum assets: net mint = minted (E→P) − burned (P→E).</li>
+<li>PNAs: net release = released from the reserve (E→P) − locked (P→E).</li>
+</ul>
+<p>The cap works exactly like the Gateway breaker: per-asset, tracked by denomination (no oracle), net flow, a governance-set cap with a floor, and a 24h auto-lift. What differs is where it hooks in, because on Asset Hub the assets pallet is not the natural place to meter bridge flow.</p>
+<p>The breaker keeps a net meter per asset: value arriving from Ethereum (E→P) minus value leaving for Ethereum (P→E). The important part is separating those bridge flows from ordinary transfers of the same asset between Asset Hub and other parachains, which must not count. A flow only counts when Ethereum is on the other side of it, as the origin on the way in or the destination on the way out.</p>
+<p>For Ethereum assets (ERC-20s and Ether), the E→P side is a mint performed by the XCM asset transactor as it executes the inbound message. A wrapper around that transactor meters the mint, but only when the message origin is the Ethereum inbound path. An ordinary reserve transfer from another parachain also mints on Asset Hub, but its origin is that parachain, not Ethereum, so it is ignored. The P→E side is a burn, and at the transactor a burn cannot be told apart from sending the asset to another parachain, so it is metered one step later, at the point the transfer is exported to Ethereum and the destination is known. This still happens on Asset Hub, where the outbound message is still structured and its per-asset amounts are visible, before it is forwarded to Bridge Hub for delivery. So both sides of the meter stay on Asset Hub.</p>
+<p>Polkadot native assets (PNAs) like DOT are simpler. PNAs are held in the bridge's reserve (the Ethereum sovereign account) while bridged to Ethereum. A P→E transfer deposits it into that reserve and an E→P transfer withdraws it, both through the asset transactor. So for PNAs the meters deposits into and withdrawals from the reserve account, which by construction excludes any transfer that does not touch it.</p>
+<p>When an inbound (E→P) transfer would breach the cap it is delayed. Instead of delivering it, the wrapper records the pending deposit (its asset and beneficiary) and returns success. The pallet's <code>on_initialize</code> hook later replays that deposit through the same transactor once the cap is no longer breached, completing as many held transfers as fit each block and re-checking the cap as it goes, so a backlog drains gradually rather than re-tripping all at once. Nothing is delivered until release, and release just re-runs the existing deposit path, so no delivery logic is duplicated and a transfer later judged malicious is simply dropped. This is the Asset Hub counterpart to the Gateway side, where the relayer holds and resubmits off-chain; here the held transfer is parked on-chain and completed by the runtime.</p>
+<p>Caps are set through a root-gated <code>set_cap</code> extrinsic on the Snowbridge System Frontend pallet on Asset Hub, the same pallet the Gateway cap is routed through (see &quot;Caps set by Governance&quot;), so both caps share one governance surface. Trip and lift events are emitted so the existing relayer monitoring can watch for them and page on-call, and halt the bridge via the emergency pause if the spike turns out to be real.</p>
+<h3 id="caps-set-by-governance"><a class="header" href="#caps-set-by-governance">Caps set by Governance</a></h3>
+<p>Caps are set via governance, through the usual method of using the Ethereum Frontend pallet on Asset Hub, which sets the Asset Hub circuit breaker cap, as well as sends a message to the Ethereum System V2 pallet on Bridge Hub, which in turn sends the message to Ethereum. Concrete cap values per asset are deliberately out of scope of this RFC, which specifies the cap mechanism's shape and the framework for choosing values, not the values themselves. Token-denominated cap values are decided and ratified by community vote at deployment and at re-vote, if necessary.</p>
+<p>For the initial contract upgrade, the 24h asset flow will not be accurate (since it needs 24 hours to build up a true view of flows), but the governance-decided floor cap will be used (as part of the cap calculation).</p>
+<h3 id="observability-and-alerting"><a class="header" href="#observability-and-alerting">Observability and alerting</a></h3>
+<p>The contract emits events at trip and lift so the existing relayer infrastructure (which already indexes Gateway and AH/BH chain events) can watch for them and page on-call.</p>
+<h2 id="drawbacks"><a class="header" href="#drawbacks">Drawbacks</a></h2>
+<ul>
+<li><strong>Gas overhead</strong>: Adding cap checks increases gas cost. Given the protection the circuit breaker gives bridge users, we believe this is an acceptable tradeoff.</li>
+<li><strong>Config tuning</strong>: Setting the initial caps is tricky to decide and requires a balance between potential false positives, and missing legitimate exploits.</li>
+<li><strong>False positives:</strong> There is the possibility of false positives and users' transactions being delayed.</li>
+</ul>
+<h2 id="testing-security-and-privacy"><a class="header" href="#testing-security-and-privacy">Testing, Security, and Privacy</a></h2>
+<ul>
+<li>P→E cap Gateway tests: Solidity unit tests, covering all the possible scenarios.</li>
+<li>E→P Asset Hub circuit breaker unit tests: net-mint tracking, cap reached and auto-lift, holding and retry of an over-cap mint, for both foreign assets and PNAs.</li>
+<li>Ethereum System Frontend pallet unit tests for setting both the Gateway and Asset Hub <code>set_cap</code> governance entry.</li>
+<li>Polkadot SDK integration tests: Testing the governance command from Asset Hub, is sent to Bridge Hub and the outbound message to Ethereum is queued correctly.</li>
+<li>No privacy concerns with this proposal - all events are public.</li>
+</ul>
+<h2 id="performance-ergonomics-and-compatibility"><a class="header" href="#performance-ergonomics-and-compatibility">Performance, Ergonomics, and Compatibility</a></h2>
+<h3 id="performance"><a class="header" href="#performance">Performance</a></h3>
+<ul>
+<li><strong>Gateway:</strong> ~10-15k extra gas per ERC20 release and PNA mint of a capped asset. Uncapped assets pay no extra gas.</li>
+<li><strong>Asset Hub:</strong> a per-asset counter read and write per E→P mint of a capped asset, negligible. Uncapped assets are untouched.</li>
+</ul>
+<h3 id="ergonomics"><a class="header" href="#ergonomics">Ergonomics</a></h3>
+<p>User-facing: under normal operation, invisible. On a trip, the user sees a delayed transaction.</p>
+<p>Operator-facing: cap configuration is a governance-driven workflow. Bridge monitoring should surface &quot;current net flow vs cap&quot; per asset so maintainers can spot a trip becoming likely before it happens.</p>
+<h3 id="compatibility"><a class="header" href="#compatibility">Compatibility</a></h3>
+<ul>
+<li><strong>Ethereum Gateway (P→E breaker):</strong> This is a major Ethereum contract change and requires a gateway upgrade. Adds the per-asset caps, a command to set cap values, inflow and outflow tracking and checking each transfer against the cap.</li>
+<li><strong>Asset Hub (E→P breaker):</strong> Adds an asset-transactor wrapper to meter the E→P inflow (scoped to bridge flows by the Ethereum inbound origin, or the reserve account for PNAs), an export-path wrapper to credit the P→E outflow for Ethereum-origin assets, and a circuit-breaker pallet for the net counters and held-transfer queue. Ordinary transfers between Asset Hub and other parachains are not counted. The Snowbridge System Frontend pallet gains a root-origin <code>set_cap</code> extrinsic (mirroring its <code>set_operating_mode</code>) that sets the local cap and proxies the <em>Gateway</em> cap command to Bridge Hub.</li>
+<li><strong>Bridge Hub:</strong> Adds a <code>set_cap</code> extrinsic (in the Ethereum System V2 pallet) that relays the Gateway cap command on to Ethereum.</li>
+</ul>
+<h2 id="prior-art-and-references"><a class="header" href="#prior-art-and-references">Prior Art and References</a></h2>
+<ul>
+<li>Hydration's <a href="https://github.com/galacticcouncil/hydration-node/tree/master/pallets/circuit-breaker"><code>pallet-circuit-breaker</code></a>, the net-volume limit pattern this design borrows (per-block in Hydration; this RFC applies it over a rolling window).</li>
+<li>Wormhole's <a href="https://github.com/wormhole-foundation/wormhole/blob/main/whitepapers/0007_governor.md">Governor</a> and <a href="https://github.com/wormhole-foundation/wormhole/blob/main/whitepapers/0011_accountant.md">Global Accountant</a>: rolling-24h USD-denominated per-chain cap (Governor) layered with a cumulative balance check (Accountant). Their later <a href="https://wormhole.com/blog/understanding-the-flow-canceling-governor-in-wormhole">flow-cancelling extension</a> addressed stablecoin caps routinely hitting 100% utilization; informed the net-flow choice in this RFC.</li>
+<li>LayerZero OFT <a href="https://github.com/LayerZero-Labs/devtools/blob/main/packages/oapp-evm/contracts/oapp/utils/RateLimiter.sol"><code>RateLimiter</code></a>: per-pathway <code>(limit, window)</code> with linear refill, raw token denomination, inbound transfers crediting against outbound (net-flow). A second precedent for the net-flow choice.</li>
+<li>Axelar's <a href="https://www.axelar.network/blog/axelar-governance-explained">governance-controlled transfer-rate limits</a>: a multisig sets per-token flow limits on-chain. Comparable to a Polkadot-governance-controlled bridge.</li>
+<li>The <a href="https://cloud.google.com/blog/topics/threat-intelligence/dissecting-nomad-bridge-hack">Nomad bridge exploit post-mortem</a> ($190M drained within hours, no velocity cap), illustrative of the failure mode this RFC's primary cap is designed to prevent.</li>
+</ul>
+<h2 id="unresolved-questions"><a class="header" href="#unresolved-questions">Unresolved Questions</a></h2>
+<p>None at this time.</p>
+<h2 id="future-directions-and-related-material"><a class="header" href="#future-directions-and-related-material">Future Directions and Related Material</a></h2>
+<ul>
+<li><strong>Asset-class default caps at registration.</strong> Add an &quot;asset class&quot; field to the asset registry (stablecoin, ETH-LST, long-tail, etc.) with a per-class default cap multiplier so new asset listings auto-cap at a sensible starting value pending governance refinement.</li>
+<li><strong>Companion RFC:</strong> the <a href="./0166-snowbridge-emergency-pause-pallet.html">Snowbridge Emergency Pause Pallet RFC</a> (PR #166) specifies the reactive layer that this preventive layer composes with.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../stale/0164-aura-allow-anyone-to-author-blocks.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../stale/0171-asset-based-storage-deposit-payments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../stale/0164-aura-allow-anyone-to-author-blocks.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../stale/0171-asset-based-storage-deposit-payments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
