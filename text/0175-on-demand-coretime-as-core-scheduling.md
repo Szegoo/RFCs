@@ -100,7 +100,9 @@ pub enum ScheduleKind {
 }
 ```
 
-and the relay-side coretime pallet gains a second broker-facing call next to `assign_core`:
+`ScheduleKind` is internal to the Relay Chain scheduler and is not part of any interface. Schedules created by `assign_core` are `Windowed`, while schedules created by `assign_core_once` are `OneShot`.
+
+The relay-side coretime pallet gains a second broker-facing call next to `assign_core`:
 
 ```rust
 pub fn assign_core_once(
